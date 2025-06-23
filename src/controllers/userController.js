@@ -48,14 +48,14 @@ export const updateUser = async (req, res, next) => {
 
 export const postHealt = async (req, res, next) => {
   try {
-    const { type, value } = req.body;
-    console.log(type, value)
+    const { type, value  } = req.body;
+    console.log(type, value);
     const user = await prisma.healtRecord.create({
-      
-      data:{
+      data: {
         type,
         value,
-      }
+        userId : req.user.id
+      },
     });
     res.status(200).json({ message: "create healt record successfully" });
   } catch (error) {
@@ -63,3 +63,37 @@ export const postHealt = async (req, res, next) => {
     next();
   }
 };
+
+export const getHealt = async (req, res, next) => {
+  try {
+    const record = await prisma.healtRecord.findMany({
+      where: { userId: req.user.id },
+    });
+    console.log("record", record);
+    res.status(200).json({ record });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+export const getHealtBtId = async(req,res,next) => {
+  try {
+    const {id} = req.params;
+    const record = await prisma.healtRecord.findFirst({
+      where :{
+        id : Number(id) , userId : req.user.id
+      }
+    })
+    if(!record){
+      createError(400 , "Record not Found")
+    }
+    res.status(200).json({
+      record
+    })
+    
+  } catch (error) {
+    console.log(error)
+    next(error)
+  }
+}
