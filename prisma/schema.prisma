@@ -24,7 +24,7 @@ model Doctor {
 
 model User {
   id       Int           @id @default(autoincrement())
-  username String
+  username String        @unique
   password String
   docNote  DoctorNote[]
   healtrec HealtRecord[]

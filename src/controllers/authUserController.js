@@ -9,7 +9,7 @@ export const userRegister = async (req, res, next) => {
 
     console.log(req.body);
 
-    const user = await prisma.user.findFirst({
+    const user = await prisma.user.findUnique({
       where: {
         username: username,
       },

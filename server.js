@@ -5,6 +5,7 @@ import authDocterRouter from './src/routes/authDoctorRouter.js'
 import notFound from './src/utils/nofFound.js'
 import authUserRouter from './src/routes/authUserRoutes.js'
 import userRouter from './src/routes/userRoutes.js'
+import docRouter from './src/routes/docRoutes.js'
 
 
 const PORT = 8888
@@ -15,6 +16,7 @@ app.use(express.json())
 app.use('/auth',authDocterRouter)
 app.use('/auth',authUserRouter)
 app.use('/auth' , userRouter)
+app.use('/auth' , docRouter)
 
 app.use(error)
 app.use(notFound)

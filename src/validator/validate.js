@@ -1,8 +1,8 @@
 import { object, ref, string } from "yup";
 
 export const registerSchema = object({
-  username: string().min(6).required("Username is required more than 6 "),
-  password: string().min(6, "Password ต้องมาUseกกว่า 6"),
+  username: string().min(4).required("Username is required more than 6 "),
+  password: string().min(4).required( "Password ต้องมาUseกกว่า 6"),
   confirmPassword: string().oneOf(
     [ref("password"), null],
     "confirm password invalid"

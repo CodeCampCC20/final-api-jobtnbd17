@@ -1,5 +1,6 @@
 import prisma from "../config/prisma.js";
 import { createError } from "../utils/createError.js";
+import bcrypt from "bcryptjs";
 
 export const getUser = async (req, res, next) => {
   try {
@@ -19,31 +20,46 @@ export const getUser = async (req, res, next) => {
 };
 
 export const updateUser = async (req, res, next) => {
-  // console.log("kkkkkkkkkkkkkkkkkkkkk")
   try {
     const { username, password } = req.body;
-    
-    const user = await prisma.user.findUnique({
+
+    console.log("Hello", req.user);
+    const hash = bcrypt.hashSync(password, 10);
+
+    const result = await prisma.user.update({
       where: {
-        id : req.user.id
-      },
-    });
-    const result = prisma.user.update({
-      where: {
-        id:req.user.id,
+        id: req.user.id,
       },
       data: {
-        username: username,
-        password: password,
+        username,
+        password: hash,
+      },
+      omit: {
+        password: true,
       },
     });
- 
-  
     res.status(200).json({
-      username: result.username,
-      password: result.password
-    ,result });
+      result,
+    });
   } catch (error) {
-    next(error)
+    next(error);
+  }
+};
+
+export const postHealt = async (req, res, next) => {
+  try {
+    const { type, value } = req.body;
+    console.log(type, value)
+    const user = await prisma.healtRecord.create({
+      
+      data:{
+        type,
+        value,
+      }
+    });
+    res.status(200).json({ message: "create healt record successfully" });
+  } catch (error) {
+    console.log(error);
+    next();
   }
 };
